@@ -1,0 +1,10 @@
+{
+    "config": {
+        "main-stack-size": {
+            "value": 4096
+        },
+        "thread-stack-size": {
+        	"value": 2048
+        }
+    }
+}

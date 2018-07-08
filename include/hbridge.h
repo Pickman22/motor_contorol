@@ -6,8 +6,8 @@
 
 extern Serial pc;
 
-#define HBRIDGE_ENABLE 1
-#define HBRIDGE_DISABLE 0
+#define HBRIDGE_ENABLE (1)
+#define HBRIDGE_DISABLE (0)
 
 typedef enum HBridgeId {
 	HBridgeA_e = 0,

@@ -3,6 +3,7 @@
 
 typedef enum ErrCode {
 	E_OK = 0,
+	E_NOK,
 	E_NULL_PTR,
 	E_INV_ARG,
 	E_INV_SIZE,

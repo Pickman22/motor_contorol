@@ -2,23 +2,12 @@
 #include "app.h"
 #include "utils.h"
 #include "err.h"
+#include "pid.h"
+#include "hbridge.h"
 
-void App_ThReadCurrent(App_s* obj) {
-float imtr;
-float dc;
-size_t idx;
-uint8_t* tmp;
+Pid pidMtrCtrl(1.0, 1.0, 0.0, (APP_CTRLTASK_RATE));
+HBridge hbridge(HBridgeA_e, HBRIDGE_DISABLE);
 
-	obj->hbridge->Enable(1);
-	obj->hbridge->DutyCycle(1.);
-	idx = 0;
-	while(1) {
-//		obj->hbridge->DutyCycle(1.);
-	
-		if(idx < obj->imtr_sz) {
-//			imtr->imtr_a[idx++] = obj->hbridge->MilliAmps();
-		}
- 
-		wait(TASK_RATE_MS_READ_CURRENT);
-	}
+void App_CtrlTask(void) {
+	led = !led;
 }

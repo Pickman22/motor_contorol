@@ -1,26 +1,14 @@
 #ifndef APP_H
 #define APP_H
 
-#include "hbridge.h"
-#include "err.h"
-#include "platform/CircularBuffer.h"
-
-#define APP_BUF_SIZE 8
-#define APP_BAUDRATE 115200
-#define APP_I32_SCALING (100)
-#define APP_PWM_FREQ (10e3)
-#define TASK_RATE_MS_READ_CURRENT (1)
-
-typedef struct {
-	HBridge* hbridge;
-	CircularBuffer<float, APP_BUF_SIZE>* buffer;
-	ErrCode_e status;
-	float* imtr_a;
-	size_t imtr_sz;
-} App_s;
-
 extern Serial pc;
+extern DigitalOut led;
+extern Ticker ctrltick;
 
-void App_ThReadCurrent(App_s* obj);
+#define APP_CTRLTASK_RATE_US (1.)
+#define APP_CTRLTASK_RATE_MS (APP_CTRLTASK_RATE_US * 1000)
+#define APP_CTRLTASK_RATE (APP_CTRLTASK_RATE_MS * 1000)
+
+void App_CtrlTask(void);
 
 #endif

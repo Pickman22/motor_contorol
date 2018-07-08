@@ -13,7 +13,7 @@
 #define HBRIDGE_B_ENABLE PTE21
 #define HBRIDGE_B_FAULT PTE20
 
-#define HBRIDGE_PWM_FREQ 1000
+#define HBRIDGE_PWM_FREQ 10000
 
 /*
 	Constant to convert from ADC counts to Milliamps:

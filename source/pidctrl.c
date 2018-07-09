@@ -9,6 +9,7 @@ static float _update_itgr(Pid_t* pid) {
 	float itgr = 0;
 	if(pid && pid->ts) {
 		err = PID_ERR(pid);
+		itgr = pid->_itgr;
 		itgr += err * pid->ts;
 		itgr = UTILS_SAT(pid->i_min, itgr, pid->i_max);
 		pid->_itgr = itgr;

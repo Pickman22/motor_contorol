@@ -1,15 +1,16 @@
 #include "pid.h"
 #include "utils.h"
 #include <float.h>
-
+#include <string.h>
 
 Pid::Pid() {
+	memset(&obj, 0u, sizeof(Pid_t));
 	obj.kp = 1.;
 	obj.ki = 1.;
 	obj.kd = 0.;
 	obj.ts = UTILS_MAX(PID_MIN_TS, 1.e-3);
-	setItgrLimits(-FLT_MIN, FLT_MAX);
-	setOutputLimits(FLT_MIN, FLT_MAX);
+	setItgrLimits(-FLT_MAX, FLT_MAX);
+	setOutputLimits(-FLT_MAX, FLT_MAX);
 	obj.y_tgt = 0.;
 	obj.y_act = 0.;
 	obj.u = 0.;
@@ -19,10 +20,11 @@ Pid::Pid() {
 Pid::Pid(float kp, float ki, float kd, float ts, float y_tgt, float y_act,
 		 float u_min, float u_max, float i_min, float i_max, float lpf, float u)
 {
+	memset(&obj, 0u, sizeof(Pid_t));
 	obj.kp = kp;
 	obj.ki = ki;
 	obj.kd = kd;
-	obj.ts = UTILS_MAX(PID_MIN_TS, 1.e-3);
+	obj.ts = UTILS_MAX(PID_MIN_TS, ts);
 	setItgrLimits(i_min, i_max);
 	setOutputLimits(u_min, u_max);
 	obj.y_tgt = y_tgt;
@@ -63,25 +65,85 @@ void Pid::setActual(float y_act) {
 }
 
 void Pid::setItgrLimits(float i_min, float i_max) {
-	if(i_min >= i_max) {
+	if(i_min > i_max) {
 		obj.i_min = -FLT_MAX;
-		obj.i_max =  FLT_MAX;
+		obj.i_max = FLT_MAX;
 	} else {
-		obj.i_min = UTILS_MIN(i_min, 0.);
-		obj.i_max = UTILS_MAX(i_max, 0.);
+		obj.i_min = i_min;
+		obj.i_max = i_max;
 	}
 }
 
+void Pid::getItgrLimits(float* i_min, float* i_max) {
+	if(i_min) {
+		*i_min = obj.i_min;
+	}
+	if(i_max) {
+		*i_max = obj.i_max;
+	}
+}
+
+void Pid::resetItgr(void) {
+	obj._itgr = 0.;
+}
+
 void Pid::setOutputLimits(float u_min, float u_max) {
-	if(u_min >= u_max) {
+	if(u_min > u_max) {
 		obj.u_min = -FLT_MAX;
-		obj.u_max =  FLT_MAX;
+		obj.u_max = FLT_MAX;
 	} else {
-		obj.u_min = UTILS_MIN(u_min, 0.);
-		obj.u_max = UTILS_MAX(u_max, 0.);
+		obj.u_min = u_min;
+		obj.u_max = u_max;
+	}
+}
+
+void Pid::getOutputLimits(float* u_min, float* u_max) {
+	if(u_min) {
+		*u_min = obj.u_min;
+	}
+	if(u_max) {
+		*u_max = obj.u_max;
 	}
 }
 
 void Pid::setTs(float ts) {
 	obj.ts = UTILS_MAX(PID_MIN_TS, ts);
+}
+
+float Pid::getTs(void) {
+	return obj.ts;
+}
+
+void Pid::getGains(float *kp, float *ki, float* kd) {
+	if(kp) {
+		*kp = obj.kp;
+	}
+	if(ki) {
+		*ki = obj.ki;
+	}
+	if(kd) {
+		*kd = obj.kd;
+	}
+}
+
+void Pid::setGains(float kp, float ki, float kd) {
+	obj.kp = kp;
+	obj.ki = ki;
+	obj.kd = kd;
+}
+
+void Pid::setGain(PIDGain_e gain, float val) {
+	switch(gain) {
+		case Kp_e:
+		obj.kp = val;
+		break;
+
+		case Ki_e:
+		obj.kp = val;
+		break;
+
+		case Kd_e:
+		obj.kd = val;
+		break;
+	}
 }

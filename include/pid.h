@@ -3,6 +3,13 @@
 
 #define PID_MIN_TS 1e-6
 
+typedef enum 
+{
+	Kp_e = 0u,
+	Ki_e,
+	Kd_e,
+} PIDGain_e;
+
 class Pid {
 
 private:
@@ -34,8 +41,22 @@ public:
 
 	void setOutputLimits(float u_min, float u_max);
 
+	void getOutputLimits(float* u_min, float* u_max);
+
 	void setItgrLimits(float i_min, float i_max);
 
+	void getItgrLimits(float* i_min, float* i_max);
+
+	void resetItgr(void);
+
 	void setTs(float ts);
+
+	float getTs(void);
+
+	void setGains(float kp, float ki, float kd);
+
+	void getGains(float* kp, float* ki, float* kd);
+
+	void setGain(PIDGain_e gain, float k);
 
 };

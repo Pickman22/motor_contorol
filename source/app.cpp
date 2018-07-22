@@ -10,4 +10,9 @@ HBridge hbridge(HBridgeA_e, HBRIDGE_DISABLE);
 
 void App_CtrlTask(void) {
 	led = !led;
+	return;
+}
+
+void App_LogTask(void) {
+	return;
 }

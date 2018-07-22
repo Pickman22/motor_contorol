@@ -22,7 +22,7 @@ public:
 
 	Pid(float kp, float ki, float kd, float ts = 1e-3,
 		float y_tgt = 0., float y_act = 0., float u_min = -FLT_MAX,
-		float u_max = FLT_MAX, float i_min = -FLT_MIN, float i_max = FLT_MAX,
+		float u_max = FLT_MAX, float i_min = -FLT_MAX, float i_max = FLT_MAX,
 		float lpf = 1., float u = 0.);
 
 	float update(float y_tgt, float y_act);

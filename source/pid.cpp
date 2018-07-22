@@ -41,7 +41,7 @@ float Pid::update(float y_tgt, float y_act) {
 }
 
 float Pid::getOutput(void) {
-	return obj.u;
+	return UTILS_SAT(obj.u_min, obj.u, obj.u_max);
 }
 
 float Pid::getError(void) {
@@ -71,6 +71,7 @@ void Pid::setItgrLimits(float i_min, float i_max) {
 	} else {
 		obj.i_min = i_min;
 		obj.i_max = i_max;
+		obj._itgr = UTILS_SAT(obj.i_min, obj._itgr, obj.i_max);
 	}
 }
 
@@ -94,6 +95,7 @@ void Pid::setOutputLimits(float u_min, float u_max) {
 	} else {
 		obj.u_min = u_min;
 		obj.u_max = u_max;
+		obj.u = UTILS_SAT((obj.u_min), (obj.u), (obj.u_max));
 	}
 }
 
@@ -129,6 +131,9 @@ void Pid::getGains(float *kp, float *ki, float* kd) {
 void Pid::setGains(float kp, float ki, float kd) {
 	obj.kp = kp;
 	obj.ki = ki;
+	if(obj.ki == 0.) {
+		resetItgr();
+	}
 	obj.kd = kd;
 }
 
@@ -139,7 +144,10 @@ void Pid::setGain(PIDGain_e gain, float val) {
 		break;
 
 		case Ki_e:
-		obj.kp = val;
+		if(val == 0.) {
+			resetItgr();
+		}
+		obj.ki = val;
 		break;
 
 		case Kd_e:

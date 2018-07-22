@@ -7,7 +7,7 @@
 static float _update_itgr(Pid_t* pid) {
 	float err = 0;
 	float itgr = 0;
-	if(pid && pid->ts) {
+	if(pid && pid->ts && (pid->ki != 0.f)) {
 		err = PID_ERR(pid);
 		itgr = pid->_itgr;
 		itgr += err * pid->ts;
@@ -20,7 +20,7 @@ static float _update_itgr(Pid_t* pid) {
 static float _update_drv(Pid_t* pid) {
 	float err = 0.;
 	float drv = 0.;
-	if(pid && pid->ts) {
+	if(pid && pid->ts && (pid->kd != 0.f)) {
 		err = PID_ERR(pid);
 		pid->_drv = (err - pid->_err) / pid->ts;
 		pid->_err = err;
